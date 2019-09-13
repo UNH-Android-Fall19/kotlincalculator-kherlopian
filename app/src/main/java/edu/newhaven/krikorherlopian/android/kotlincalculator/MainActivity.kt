@@ -9,8 +9,6 @@ import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
 
-    // lateinit var txtInput: TextView
-
     var isEmpty: Boolean = true
     var resultVisible: Boolean = false
     var lastDot: Boolean = false
@@ -21,9 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    /**
-     * Append the Button.text to the TextView
-     */
+
     fun onDigit(view: View) {
         if (isEmpty || resultVisible) {
             txtInput.text = (view as Button).text
@@ -39,9 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /**
-     * Append . to the TextView
-     */
+
     fun onDecimalPoint(view: View) {
         if (!isEmpty && !lastDot) {
             txtInput.append((view as Button).text)
@@ -57,9 +51,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Append +,-,*,/ operators to the TextView
-     */
+
     fun onOperator(view: View) {
         if (!isEmpty && !lastOperator) {
             txtInput.append((view as Button).text)
@@ -70,9 +62,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    /**
-     * Clear the TextView
-     */
     fun onClear(view: View) {
         this.txtInput.text = ""
         isEmpty = true
@@ -81,9 +70,7 @@ class MainActivity : AppCompatActivity() {
         resultVisible = false
     }
 
-    /**
-     * Calculate the output using Exp4j
-     */
+
     fun onEqual(view: View) {
         val txt = txtInput.text.toString()
         val expression = ExpressionBuilder(txt).build()
