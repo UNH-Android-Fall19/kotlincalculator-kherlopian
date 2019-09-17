@@ -6,6 +6,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import net.objecthunter.exp4j.ExpressionBuilder
+import java.lang.ArithmeticException
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onDigit(view: View) {
+        //if empty start by number, else append to it.
+        // If result of an operation is displayed, and new number clicked = Start a new operation.Clear old operation.
         if (isEmpty || resultVisible) {
             txtInput.text = (view as Button).text
             isEmpty = false
@@ -37,12 +40,13 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onDecimalPoint(view: View) {
+        //lastdot to make sure 2 dots not in same number like 3.445.333
         if (!isEmpty && !lastDot) {
             txtInput.append((view as Button).text)
             lastDot = true
             lastOperator = false
 
-        } else if (isEmpty) {
+        } else if (isEmpty) {//if empty, user can start writing a dot like .2 which means 0.2.
             txtInput.text = (view as Button).text
             isEmpty = false
             lastDot = false
@@ -53,11 +57,18 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onOperator(view: View) {
-        if (!isEmpty && !lastOperator) {
-            txtInput.append((view as Button).text)
+        if (!lastOperator) {
+            var operator = (view as Button).text
+            //if empty, and nothing entered yet. User can enter a + or  - number.But not multiply or divide.
+            if(isEmpty && (operator.equals("+") || operator.equals("-")))
+                txtInput.text = (view as Button).text
+            else
+                txtInput.append((view as Button).text)
+
             resultVisible = false
             lastDot = false
             lastOperator = true
+            isEmpty = false
         }
     }
 
@@ -74,8 +85,14 @@ class MainActivity : AppCompatActivity() {
     fun onEqual(view: View) {
         val txt = txtInput.text.toString()
         val expression = ExpressionBuilder(txt).build()
-        val result = expression.evaluate()
-        txtInput.text = result.toString()
+        //put in catch, because if user divides with 0 application crashes. 3/0.
+        try{
+            val result = expression.evaluate()
+            txtInput.text = result.toString()
+        }
+        catch(ex : ArithmeticException){
+            txtInput.text = ""
+        }
         resultVisible = true
         lastDot = true
         lastOperator = false
