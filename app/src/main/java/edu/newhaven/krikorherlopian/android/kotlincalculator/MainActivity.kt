@@ -60,9 +60,11 @@ class MainActivity : AppCompatActivity() {
         if (!lastOperator) {
             var operator = (view as Button).text
             //if empty, and nothing entered yet. User can enter a + or  - number.But not multiply or divide.
+            System.out.println(isEmpty )
+            System.out.println("lllllllllll"+operator)
             if(isEmpty && (operator.equals("+") || operator.equals("-")))
                 txtInput.text = (view as Button).text
-            else
+            else if(!isEmpty)
                 txtInput.append((view as Button).text)
 
             resultVisible = false
